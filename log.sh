@@ -1,1 +1,1 @@
-docker logs -f
+docker-compose logs -f
