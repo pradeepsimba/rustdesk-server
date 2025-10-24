@@ -1,1 +1,1 @@
-rustdesk_server-hbbs-1 && rustdesk_server-hbbr-1
+docker logs -f hbbs && docker logs -f hbbr
