@@ -1,4 +1,4 @@
-version: '3'
+# version: '3'
 
 networks:
   rustdesk-net:
@@ -8,6 +8,7 @@ services:
   hbbr:
     container_name: hbbr
     build: .
+    image: rustdesk/rustdesk-server:latest
     command: hbbr
     ports:
       - "8190:21117"
@@ -21,6 +22,7 @@ services:
   hbbs:
     container_name: hbbs
     build: .
+    image: rustdesk/rustdesk-server:latest
     command: hbbs -r 15.207.161.44:8190
     depends_on:
       - hbbr
