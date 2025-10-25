@@ -6,18 +6,18 @@ RUN apt-get update && \
     ca-certificates \
     bash \
     curl \
-    unzip && \
+    tar && \
     rm -rf /var/lib/apt/lists/*
 
 WORKDIR /app
 
 # Download and install RustDesk Server binaries
 RUN RUSTDESK_VERSION=1.1.10-2 && \
-    curl -L -o rustdesk-server.zip https://github.com/rustdesk/rustdesk-server/releases/download/${RUSTDESK_VERSION}/rustdesk-server-linux-amd64.zip && \
-    unzip rustdesk-server.zip && \
+    curl -L -o rustdesk-server.tar.gz https://github.com/rustdesk/rustdesk-server/releases/download/${RUSTDESK_VERSION}/rustdesk-server-linux-amd64.tar.gz && \
+    tar -xzf rustdesk-server.tar.gz && \
     mv hbbs hbbr /usr/local/bin/ && \
     chmod +x /usr/local/bin/hbbs /usr/local/bin/hbbr && \
-    rm rustdesk-server.zip
+    rm rustdesk-server.tar.gz
 
 # Expose RustDesk Server ports
 EXPOSE 21115-21119
