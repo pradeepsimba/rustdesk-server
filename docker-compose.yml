@@ -24,9 +24,10 @@ services:
     container_name: hbbs
     build: .
     image: rustdesk/rustdesk-server:local
-    command: hbbs -r 15.207.161.44:8190
+    command: hbbs -r hbbr:21117
     depends_on:
-      - hbbr
+      hbbr:
+        condition: service_healthy
     ports:
       - "8188:21115"
       - "8189:21116"
