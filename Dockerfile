@@ -5,8 +5,25 @@ RUN apt-get update && \
     apt-get install -y --no-install-recommends \
     ca-certificates \
     bash \
-    curl && \
-    rm -rf /var/lib/apt/lists/*
+    curl \
+    file \
+    lsof \
+    procps \
+    libssl3 \
+    libstdc++6 \
+    libgcc-s1 \
+    libatomic1 \
+    libgomp1 \
+    libzstd1 \
+    liblz4-1 \
+    libcurl4 \
+    libuv1 \
+    libsqlite3-0 \
+    libdbus-1-3 \
+    libexpat1 \
+    libsystemd0 \
+    libudev1 \
+    && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /app
 
