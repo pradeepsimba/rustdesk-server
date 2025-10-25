@@ -1,0 +1,35 @@
+---
+services:
+  hbbs:
+    container_name: hbbs
+    ports:
+      - "8188:21115"
+      - "8189:21116"
+      - "8189:21116/udp"
+      - "8191:21118"
+    image: rustdesk/rustdesk-server:latest
+    command: hbbs -r "${RUSTDESK_FQDN}":21117 -k "${RUSTDESK_SECRET_KEY}"
+    volumes:
+      - ./hbbs:/root
+    networks:
+      - rustdesk-net
+    depends_on:
+      - hbbr
+    restart: unless-stopped
+
+  hbbr:
+    container_name: hbbr
+    ports:
+      - "8190:21117"
+      - "8192:21119"
+    image: rustdesk/rustdesk-server:latest
+    command: hbbr -k "${RUSTDESK_SECRET_KEY}"
+    volumes:
+      - ./hbbr:/root
+    networks:
+      - rustdesk-net
+    restart: unless-stopped
+
+networks:
+  rustdesk-net:
+    external: false
