@@ -1,18 +1,26 @@
 FROM debian:bookworm-slim
 
-# Install a minimal runtime and bash so `docker exec -it <container> bash` works
-RUN apt-get update \
-	&& apt-get install -y --no-install-recommends ca-certificates bash curl \
-	&& rm -rf /var/lib/apt/lists/*
+# Install required packages and clean up
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends \
+    ca-certificates \
+    bash \
+    curl \
+    unzip && \
+    rm -rf /var/lib/apt/lists/*
 
 WORKDIR /app
 
-# NOTE: Binaries (hbbs/hbbr) are mounted at runtime via docker-compose volumes
-# Place your hbbs and hbbr executables in ./bin/ directory
-# They will be mounted into /usr/local/bin inside containers
+# Download and install RustDesk Server binaries
+RUN RUSTDESK_VERSION=1.1.10-2 && \
+    curl -L -o rustdesk-server.zip https://github.com/rustdesk/rustdesk-server/releases/download/${RUSTDESK_VERSION}/rustdesk-server-linux-amd64.zip && \
+    unzip rustdesk-server.zip && \
+    mv hbbs hbbr /usr/local/bin/ && \
+    chmod +x /usr/local/bin/hbbs /usr/local/bin/hbbr && \
+    rm rustdesk-server.zip
 
-# Expose common RustDesk server ports
-EXPOSE 21115 21116 21117 21118 21119
+# Expose RustDesk Server ports
+EXPOSE 21115-21119
 
-# Default command — can be overridden by docker-compose or `docker run`.
+# Default command (will be overridden by docker-compose)
 CMD ["hbbs"]
