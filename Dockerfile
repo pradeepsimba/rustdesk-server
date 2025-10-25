@@ -10,10 +10,10 @@ RUN apt-get update && \
 
 WORKDIR /app
 
-# Download and install RustDesk Server binaries
+# Download and install RustDesk Server ARM64 binaries
 RUN RUSTDESK_VERSION=1.1.10-2 && \
-    curl -L -o /usr/local/bin/hbbs https://github.com/rustdesk/rustdesk-server/releases/download/${RUSTDESK_VERSION}/hbbs-linux-amd64 && \
-    curl -L -o /usr/local/bin/hbbr https://github.com/rustdesk/rustdesk-server/releases/download/${RUSTDESK_VERSION}/hbbr-linux-amd64 && \
+    curl -L -o /usr/local/bin/hbbs https://github.com/rustdesk/rustdesk-server/releases/download/${RUSTDESK_VERSION}/hbbs-linux-arm64 && \
+    curl -L -o /usr/local/bin/hbbr https://github.com/rustdesk/rustdesk-server/releases/download/${RUSTDESK_VERSION}/hbbr-linux-arm64 && \
     chmod +x /usr/local/bin/hbbs /usr/local/bin/hbbr
 
 # Expose RustDesk Server ports
