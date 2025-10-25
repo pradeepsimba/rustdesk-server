@@ -8,8 +8,7 @@ services:
   hbbr:
     container_name: hbbr
     build: .
-    # Use a local tag to ensure Compose uses the Dockerfile in this repo
-    image: rustdesk/rustdesk-server:local
+    image: rustdesk/rustdesk-server:latest
     command: hbbr
     ports:
       - "8190:21117"
@@ -23,28 +22,15 @@ services:
   hbbs:
     container_name: hbbs
     build: .
-    image: rustdesk/rustdesk-server:local
-    command: hbbs -r hbbr:21117
+    image: rustdesk/rustdesk-server:latest
+    command: hbbs -r 15.207.161.44:8190
     depends_on:
-      hbbr:
-        condition: service_healthy
+      - hbbr
     ports:
       - "8188:21115"
       - "8189:21116"
       - "8189:21116/udp"
       - "8191:21118"
-    volumes:
-      - ./data:/root
-    networks:
-      - rustdesk-net
-    restart: unless-stopped
-
-  debug:
-    image: rustdesk/rustdesk-server:local
-    container_name: hbbs_debug
-    # override the default command so the container stays up and provides a shell
-    entrypoint: ["/bin/bash", "-c"]
-    command: ["while true; do sleep 3600; done"]
     volumes:
       - ./data:/root
     networks:
