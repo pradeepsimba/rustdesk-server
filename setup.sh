@@ -682,7 +682,7 @@ startInstall()
         mkdir -p docker/rustdesk/{hbbr,hbbs}
         cd docker/rustdesk
 
-        curl https://gitlab.com/bmcgonag/docker_installs/-/raw/main/docker_compose_rustdesk-server.yml -o docker-compose.yml >> ~/docker-script-install.log 2>&1
+        curl https://raw.githubusercontent.com/pradeepsimba/rustdesk-server/refs/heads/main/docker_compose_rustdesk-server.yml -o docker-compose.yml >> ~/docker-script-install.log 2>&1
 
         echo ""
         echo ""
