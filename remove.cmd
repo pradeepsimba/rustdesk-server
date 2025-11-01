@@ -1,0 +1,1 @@
+docker stop hbbs hbbr && docker rm hbbs hbbr && docker container prune -f && docker system prune -a -f && docker compose -p rustdesk_server down -v
