@@ -7,13 +7,13 @@ services:
     restart: unless-stopped
     environment:
       - RUST_LOG=info
-      - HBBS_PORT=8190        # hbbs custom port
-      - HBBR_PORT=8192        # tells hbbs where hbbr listens
+      - HBBS_PORT=8190
+      - HBBR_PORT=8192
     command: hbbs
     ports:
       - "8190:8190"           # TCP for hbbs
       - "8190:8190/udp"       # UDP for NAT traversal
-      - "8192:8192"           # used by hbbr
+      - "8192:8192"           # TCP for hbbs-hbbr communication
     volumes:
       - ./data:/root/.config/rustdesk
 
@@ -23,9 +23,10 @@ services:
     restart: unless-stopped
     environment:
       - RUST_LOG=info
-      - HBBR_PORT=8192        # hbbr custom port
+      - HBBR_PORT=8192
     command: hbbr
     ports:
       - "8192:8192"           # TCP for hbbr relay
+      - "8192:8192/udp"       # UDP relay
     volumes:
       - ./data:/root/.config/rustdesk
