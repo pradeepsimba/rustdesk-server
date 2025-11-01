@@ -8,9 +8,9 @@ services:
       # Default ports, no need to override HBBS_PORT/HBBR_PORT
     command: hbbs
     ports:
-      - "21115:21115"         # TCP ID/Signaling
-      - "21116:21116/udp"     # UDP NAT traversal
-      - "21117:21117"         # TCP relay coordination
+      - "8188:21115"         # TCP ID/Signaling
+      - "8187:21116/udp"     # UDP NAT traversal
+      - "8189:21117"         # TCP relay coordination
     volumes:
       - ./data:/root/.config/rustdesk
 
@@ -23,7 +23,7 @@ services:
       # Default HBBR_PORT=21118 automatically
     command: hbbr
     ports:
-      - "21118:21118"         # TCP relay
-      - "21118:21118/udp"     # UDP relay
+      - "8190:21118"         # TCP relay
+      - "8190:21118/udp"     # UDP relay
     volumes:
       - ./data:/root/.config/rustdesk
