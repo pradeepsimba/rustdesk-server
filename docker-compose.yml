@@ -1,38 +1,31 @@
-# version: '3'
-
-networks:
-  rustdesk-net:
-    external: false
+version: "3.8"
 
 services:
-  hbbr:
-    container_name: hbbr
-    build: .
+  hbbs:
     image: rustdesk/rustdesk-server:latest
+    container_name: hbbs
+    restart: unless-stopped
+    environment:
+      - RUST_LOG=info
+      - HBBS_PORT=8190        # custom port for hbbs
+      - HBBR_PORT=8191        # hbbr relay port
+    command: hbbs
+    ports:
+      - "8190:8190"           # TCP for hbbs
+      - "8190:8190/udp"       # UDP for NAT traversal
+      - "8191:8191"           # connection to hbbr relay
+    volumes:
+      - ./data:/root/.config/rustdesk
+
+  hbbr:
+    image: rustdesk/rustdesk-server:latest
+    container_name: hbbr
+    restart: unless-stopped
+    environment:
+      - RUST_LOG=info
+      - HBBR_PORT=8191        # custom port for hbbr relay
     command: hbbr
     ports:
-      - "8190:21117"
-      - "8192:21119"
+      - "8191:8191"           # TCP for hbbr relay
     volumes:
-      - ./data:/root
-    networks:
-      - rustdesk-net
-    restart: unless-stopped
-
-  hbbs:
-    container_name: hbbs
-    build: .
-    image: rustdesk/rustdesk-server:latest
-    command: hbbs -r 15.207.161.44:8190
-    depends_on:
-      - hbbr
-    ports:
-      - "8188:21115"
-      - "8189:21116"
-      - "8189:21116/udp"
-      - "8191:21118"
-    volumes:
-      - ./data:/root
-    networks:
-      - rustdesk-net
-    restart: unless-stopped
+      - ./data:/root/.config/rustdesk
