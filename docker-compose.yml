@@ -7,29 +7,33 @@ services:
     restart: unless-stopped
     environment:
       - RUST_LOG=info
-      - HBBS_PORT=8190
-      - HBBR_PORT=8192
+      - HBBS_PORT=8190          # Custom ID/Signaling port
+      - HBBR_PORT=8192          # Tells hbbs where hbbr listens
     command: hbbs -k _
     ports:
-      - "8190:8190"
-      - "8190:8190/udp"
+      # Custom ports - Essential for your setup
+      - "8190:8190"             # TCP for hbbs ID/Signaling
+      - "8190:8190/udp"         # UDP for NAT traversal
+      # Default RustDesk ports - Included for convenience (optional)
       - "21115:21115"
       - "21116:21116"
       - "21117:21117/udp"
     volumes:
       - ./data:/root/.config/rustdesk
 
-  hbbr: # <--- Must be aligned with 'hbbs:' and nested under 'services:'
+  hbbr:
     image: rustdesk/rustdesk-server:latest
     container_name: hbbr
     restart: unless-stopped
     environment:
       - RUST_LOG=info
-      - HBBR_PORT=8192
+      - HBBR_PORT=8192          # Custom Relay port
     command: hbbr -k _
     ports:
-      - "8192:8192"
-      - "8192:8192/udp" # <-- The UDP line for the fix
+      # Custom ports - Essential for your setup
+      - "8192:8192"             # TCP for hbbr relay
+      - "8192:8192/udp"         # UDP for hbbr relay (REQUIRED)
+      # Default RustDesk port - Included for convenience (optional)
       - "21117:21117"
     volumes:
       - ./data:/root/.config/rustdesk
