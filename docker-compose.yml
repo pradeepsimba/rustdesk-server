@@ -3,15 +3,12 @@ services:
     image: rustdesk/rustdesk-server:latest
     container_name: hbbs
     restart: unless-stopped
-    environment:
-      - RUST_LOG=info
-      - HBBS_PORT=21115       # Internal RustDesk default
-      - HBBR_PORT=21118       # Internal hbbr default
     command: hbbs
     ports:
-      - "8188:21115"          # TCP for ID/Signaling
-      - "8187:21116/udp"      # UDP for NAT traversal
-      - "8189:21117"          # TCP relay coordination
+      - "8188:21115"         # TCP for ID/Signaling
+      - "8187:21116"         # TCP for ID registration and heartbeat
+      - "8187:21116/udp"     # UDP for ID registration and heartbeat
+      - "8189:21118"         # TCP for web client support
     volumes:
       - ./data:/root/.config/rustdesk
 
@@ -19,12 +16,9 @@ services:
     image: rustdesk/rustdesk-server:latest
     container_name: hbbr
     restart: unless-stopped
-    environment:
-      - RUST_LOG=info
-      - HBBR_PORT=21118       # Internal RustDesk relay port
     command: hbbr
     ports:
-      - "8190:21118"          # TCP for relay
-      - "8190:21118/udp"      # UDP relay
+      - "8190:21117"         # TCP relay
+      - "8191:21119"         # TCP relay for web client
     volumes:
       - ./data:/root/.config/rustdesk
