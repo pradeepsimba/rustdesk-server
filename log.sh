@@ -1,1 +1,1 @@
-docker logs hbbr && docker logs hbbs
+docker logs hbbr
