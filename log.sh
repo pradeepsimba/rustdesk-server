@@ -1,1 +1,1 @@
-docker-compose logs -f
+docker logs hbbr && docker logs hbbs
