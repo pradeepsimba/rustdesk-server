@@ -1,24 +1,68 @@
+version: '3'
+
+networks:
+  rustdesk-net:
+    external: false
+
 services:
   hbbs:
-    image: rustdesk/rustdesk-server:latest
     container_name: hbbs
-    restart: unless-stopped
-    command: hbbs
     ports:
-      - "8188:21115"         # TCP for ID/Signaling
-      - "8187:21116"         # TCP for ID registration and heartbeat
-      - "8187:21116/udp"     # UDP for ID registration and heartbeat
-      - "8189:21118"         # TCP for web client support
+      - 8186:21115
+      - 8187:21116
+      - 8187:21116/udp
+      - 8189:21118
+    image: rustdesk/rustdesk-server:latest
+    command: hbbs -r your.rustdeskserver.host:8188
+    environment:
+      - ALWAYS_USE_RELAY=Y
     volumes:
-      - ./data:/root/.config/rustdesk
+      - ./data/server:/root
+    networks:
+      - rustdesk-net
+    depends_on:
+      - hbbr
+    restart: unless-stopped
 
   hbbr:
-    image: rustdesk/rustdesk-server:latest
     container_name: hbbr
-    restart: unless-stopped
-    command: hbbr
     ports:
-      - "8190:21117"         # TCP relay
-      - "8191:21119"         # TCP relay for web client
+      - 8188:21117
+      - 8190:21119
+    image: rustdesk/rustdesk-server:latest
+    command: hbbr
     volumes:
-      - ./data:/root/.config/rustdesk
+      - ./data/server:/root
+    networks:
+      - rustdesk-net
+    restart: unless-stopped
+
+
+
+
+
+# services:
+#   hbbs:
+#     image: rustdesk/rustdesk-server:latest
+#     container_name: hbbs
+#     restart: unless-stopped
+#     command: hbbs
+#     ports:
+#       - "8188:21115"         # TCP for ID/Signaling
+#       - "8187:21116"         # TCP for ID registration and heartbeat
+#       - "8187:21116/udp"     # UDP for ID registration and heartbeat
+#       - "8189:21118"         # TCP for web client support
+#     volumes:
+#       - ./data:/root/.config/rustdesk
+
+#   hbbr:
+#     image: rustdesk/rustdesk-server:latest
+#     container_name: hbbr
+#     restart: unless-stopped
+#     command: hbbr
+#     ports:
+#       - "8190:21117"         # TCP relay
+#       - "8191:21119"         # TCP relay for web client
+#     volumes:
+#       - ./data:/root/.config/rustdesk
+      
